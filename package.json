@@ -1,0 +1,22 @@
+{
+  "name": "dark-souls-3-cheat-sheet",
+  "version": "1.0.0",
+  "description": "To view the cheat sheet [click here](http://zkjellberg.github.io/dark-souls-3-cheat-sheet/).",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tschuck/dark-souls-3-cheat-sheet.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tschuck/dark-souls-3-cheat-sheet/issues"
+  },
+  "homepage": "https://github.com/Tschuck/dark-souls-3-cheat-sheet#readme",
+  "devDependencies": {
+    "electron": "^1.8.4"
+  }
+}
