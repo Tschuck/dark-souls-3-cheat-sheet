@@ -1,4 +1,4 @@
-var profilesKey = 'darksouls3_profiles';
+window.profilesKey = 'darksouls3_profiles';
 window.jQuery = $;
 
 (function($) {
