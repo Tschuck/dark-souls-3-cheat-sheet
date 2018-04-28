@@ -61,6 +61,8 @@ $(function() {
           startRegion(region);
         }
       });
+    } else {
+      ds.eWindow.show();
     }
   }
 
@@ -75,25 +77,38 @@ $(function() {
    * Resize electron window, start ds-integrated view and clone elements to ds-integrated container
    */
   function startRegion(region) {
-    // transforming browser using electron
-    // safe before state
-    ds.beforeBounds = ds.eWindow.getBounds();
-    
-    // move to top right corner
-    ds.eWindow.setBounds({
-      x: ds.screenSize.width - 300,
-      y: 0,
-      width: 300,
-      height: 400,
-    });
-    ds.$container.css('height', '400px');
+    // save active region to profile
+    var profile = getProfile();
+    profile.dsIActive = region.id;
 
-    // set electron window options
-    ds.eWindow.setAlwaysOnTop(true);
-    ds.eWindow.setMenuBarVisibility(false);
-    ds.eWindow.setMovable(false);
-    ds.eWindow.setResizable(false);
-    ds.eWindow.setOpacity(0.7);
+    $.jStorage.set(window.profilesKey, window.profiles);
+
+    // check if we are in a frameless window, else close the current normal view and open it
+    if (window.location.search.indexOf('ds-i-active') === -1) {
+      var dsIWindow = new ds.electron.remote.BrowserWindow({
+        x: ds.screenSize.width - 300,
+        y: 0,
+        width: 300,
+        height: 400,
+        frame: false,
+        show: false,
+        alwaysOnTop: true
+      });
+
+      dsIWindow.setAlwaysOnTop(true, "floating");
+      dsIWindow.setVisibleOnAllWorkspaces(true);
+      dsIWindow.setFullScreenable(false);
+
+      dsIWindow.loadURL(window.location.href + '?ds-i-active=true');
+
+      dsIWindow.webContents.openDevTools();
+
+      ds.electron.remote.getCurrentWindow().close();
+
+      return;
+    }
+    
+    ds.$container.css('height', '400px');
 
     // setup normal browser stuff
     ds.activeRegion = region;
@@ -109,8 +124,6 @@ $(function() {
     var $nextRegion = $('<button class="ds-i-next"><span class="glyphicon glyphicon-chevron-right"></span></button>');
     var $closeRegion = $('<button class="ds-i-close"><span class="glyphicon glyphicon-remove"></span></button>');
 
-    $regionHeader.find('a').prepend(ds.regions.indexOf(region) + 1 + '. ');
-
     $regionHeader.prepend($nextRegion);
     $nextRegion.click(nextRegion);
     
@@ -120,8 +133,30 @@ $(function() {
     $regionHeader.append($closeRegion);
     $closeRegion.click(closeRegion);
 
+    // remove html without tags
+    $regionHeader.contents().filter(function () {
+      return this.nodeType === 3;
+    }).remove();
+
+    // add count to list elements
+    var labelContents = ds.$regionContainer.find('ul li label .item_content').toArray();
+    var labelContentCount = labelContents.length;
+    
+    for (var i = 0; i < labelContents.length; i++) {
+      $(labelContents[i]).html(((i + 1) + ' / ' + labelContentCount) + ' ' + $(labelContents[i]).html())
+    }
+
+    // add region counter
+    $regionHeader.find('a').prepend(ds.regions.indexOf(region) + 1 + '. ');
+
     // bin list element clicks
-    ds.$container.find('li').click(function() {
+    ds.$container.find('li').click(function($event) {
+      // set origin li active
+      var $originInput = $($('[data-id="' + $($event.currentTarget).attr('data-id') + '"] input[type="checkbox"]')[0]);
+      $originInput.prop('checked', true);
+
+      $originInput.click();
+
       setTimeout(setActiveTodo);
     });
 
@@ -132,11 +167,7 @@ $(function() {
     ds.$body.addClass('ds-i-active');
     ds.$body.scrollTop(0);
 
-    // save active region to profile
-    var profile = getProfile();
-    profile.dsIActive = region.id;
-
-    $.jStorage.set(window.profilesKey, window.profiles);
+    ds.eWindow.show();
   }
 
   /**
@@ -165,7 +196,7 @@ $(function() {
         ds.$container.animate({
           scrollTop: ds.$container.scrollTop() + $activeTodo.offset().top - 40
         });
-      });
+      }, 500);
     }
   }
 
@@ -173,19 +204,28 @@ $(function() {
    * Removes data from regionContainer and makes everthying else visible 
    */
   function closeRegion() {
-    // restore electron before
-    ds.eWindow.setBounds(ds.beforeBounds);
-    ds.eWindow.setAlwaysOnTop(false);
-    ds.eWindow.setMenuBarVisibility(true);
-    ds.eWindow.setMovable(true);
-    ds.eWindow.setResizable(true);
-    ds.eWindow.setOpacity(1);
-
     // remove active region from profile
     var profile = getProfile();
     delete profile.dsIActive;
 
     $.jStorage.set(window.profilesKey, window.profiles);
+
+    // restore electron before
+    if (window.location.search.indexOf('ds-i-active') !== -1) {
+      var dsIWindow = new ds.electron.remote.BrowserWindow({
+        width: 800,
+        height: 600,
+        show: false
+      });
+
+      dsIWindow.loadURL(window.location.href.split('?')[0]);
+
+      // dsIWindow.webContents.openDevTools();
+
+      ds.electron.remote.getCurrentWindow().close();
+
+      return;
+    }
 
     delete ds.beforeBounds;
     delete ds.activeRegion;
@@ -193,7 +233,6 @@ $(function() {
     ds.$body.removeClass('ds-i-active');
   }
   
-
   /**
    * Jump to next region tracking
    */

@@ -8,8 +8,7 @@ function createWindow () {
   win = new BrowserWindow({
     width: 800,
     height: 600,
-    // transparent: true,
-    frame: false
+    show: false,
   });
 
   win.loadURL(url.format({
@@ -18,11 +17,11 @@ function createWindow () {
     slashes: true
   }))
 
-  win.webContents.openDevTools()
-
+  win.webContents.openDevTools();
+  
   win.on('closed', () => {
     win = null
-  })
+  });
 }
 
 app.on('ready', createWindow)

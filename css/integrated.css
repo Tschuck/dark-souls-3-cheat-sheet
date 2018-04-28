@@ -95,6 +95,8 @@ body.ds-i-active .ds-integrated {
 
   padding: 5px 10px;
 
+  transition: height linear 0.5s, background-color linear 0.5s, blur linear 0.5s;
+
   filter: blur(1px);
 }
 
@@ -110,7 +112,7 @@ body.ds-i-active .ds-integrated {
 }
 
 .ds-integrated ul li.ds-i-active-todo {
-  font-size: 15px;
+  font-size: 17px;
 
   padding: 10px 10px;
 
