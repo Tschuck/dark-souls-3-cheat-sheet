@@ -102,7 +102,7 @@ $(function() {
 
       dsIWindow.loadURL(window.location.href + '?ds-i-active=true');
 
-      dsIWindow.webContents.openDevTools();
+      // dsIWindow.webContents.openDevTools();
 
       ds.electron.remote.getCurrentWindow().close();
 

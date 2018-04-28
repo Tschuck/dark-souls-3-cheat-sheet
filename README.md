@@ -42,3 +42,35 @@ The **class="f_gem f_misc"** field is used for the filtering system. This task p
 | f_misc  | *any other items* |
 
 If none of these filter classes match, use **class="f_none"**.
+
+# Dark Souls "integrated" mode
+It's an nearly seamless window mode, to handle the wiki entries as an overlay during Dark Souls playing.
+The integrated mode uses Electron to build the web site into an application. Only 2 files are used and the origin template isn't touched.
+
+## Prerequisites
+- nodejs (tested with node 8.9, npm 5.5.1)
+- electron
+```shell
+npm i -g electron
+```
+
+## Run
+```shell
+npm run start
+```
+
+## Build executable
+### Windows
+```shell
+npm run package-win
+```
+
+### Mac
+```shell
+npm run package-mac
+```
+
+### Linux
+```shell
+npm run package-linux
+```
