@@ -22,7 +22,7 @@ $(function() {
         $header: $(region),
         $list: $(region).next(),
         $todos: $(region).next().children(),
-        $startButton: $('<button class="ds-i-start">Start tracking</button>')
+        $startButton: $('<button type="button" class="btn btn-primary ds-i-start">Start tracking</button>')
       };
     });
 
@@ -92,7 +92,8 @@ $(function() {
         height: 400,
         frame: false,
         show: false,
-        alwaysOnTop: true
+        alwaysOnTop: true,
+        transparent:true
       });
 
       dsIWindow.setAlwaysOnTop(true, "floating");

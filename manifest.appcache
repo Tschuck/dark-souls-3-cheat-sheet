@@ -1,12 +1,14 @@
 CACHE MANIFEST
-#version 2018-04-07 0:30
+#version 2018-04-21 23:41
 
 index.html
 
 CACHE:
 css/main.css
+css/ds-integrated.css
 js/jquery.highlight.js
 js/main.js
+js/ds-integrated.css
 img/favicon.ico
 
 https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css

@@ -1,6 +1,5 @@
 window.profilesKey = 'darksouls3_profiles';
 window.jQuery = $;
-
 (function($) {
     'use strict';
 
@@ -24,10 +23,8 @@ window.jQuery = $;
     };
 
     var profiles = $.jStorage.get(profilesKey, {});
-
     // pull profiles to window to handle them by other js files
     window.profiles = profiles;
-
     /// assure default values are set
     /// necessary 'cause we're abusing local storage to store JSON data
     /// done in a more verbose way to be easier to understand
