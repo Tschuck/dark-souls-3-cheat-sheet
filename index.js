@@ -25,7 +25,7 @@ function createWindow () {
     win = null
   });
 
-  // win.webContents.openDevTools({ detach: true });
+   win.webContents.openDevTools({ detach: true });
 }
 
 app.on('ready', createWindow);

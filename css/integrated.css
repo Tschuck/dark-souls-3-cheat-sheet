@@ -13,7 +13,7 @@ body.ds-i {
 }
 
 .ds-i-app-control {
-  background-color: #dedede;
+  background-color: #3f81bb;
   position: fixed;
   top: 0;
   left: 0;
@@ -32,6 +32,7 @@ body.ds-i {
 .ds-i-app-control span {
   padding: 10px;
   cursor: pointer;
+  color: #fff;
 }
 
 /* basic resets */
