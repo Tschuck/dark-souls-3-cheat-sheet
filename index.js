@@ -10,7 +10,9 @@ function createWindow () {
     width: 800,
     height: 600,
     show: false,
-    icon: `${ __dirname }/img/favicon-152.png`
+    icon: `${ __dirname }/img/favicon-152.png`,
+    frame: false,
+    transparent:true
   });
 
   win.loadURL(url.format({
@@ -23,7 +25,7 @@ function createWindow () {
     win = null
   });
 
-  // win.webContents.openDevTools({ detach: true });
+  win.webContents.openDevTools({ detach: true });
 }
 
 app.on('ready', createWindow);

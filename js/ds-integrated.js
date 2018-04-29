@@ -6,6 +6,13 @@ $(function() {
    * Initialize the ds-integrated structure and load up the regions
    */
   function initializeDSIntegrated() {
+    var $applicationControl = $([
+      '<div class="ds-i-app-control">',
+      ' <span class="glyphicon glyphicon-move"></span>',
+      ' <span class="glyphicon glyphicon-remove"></span>',
+      '</div>',
+    ].join(''));
+
     var $container = $([
       '<div class="ds-integrated">',
       ' <div class="ds-i-region"></div>',
@@ -43,6 +50,7 @@ $(function() {
       $throughList: $throughList,
       regions: regions,
       $container: $container,
+      $applicationControl: $applicationControl,
       $regionContainer: $regionContainer,
       $body: $('body'),
       electron: electron,
@@ -51,6 +59,13 @@ $(function() {
     };
 
     ds.$body.append(ds.$container);
+
+    ds.$body.addClass('ds-i');
+
+    $applicationControl.insertBefore($(ds.$body.children()[0]));
+    $applicationControl.find('span').click(function () {
+      ds.eWindow.close();
+    });
 
     // restore latest state
     var profile = getProfile();
@@ -83,37 +98,24 @@ $(function() {
 
     $.jStorage.set(window.profilesKey, window.profiles);
 
-    // check if we are in a frameless window, else close the current normal view and open it
-    if (window.location.search.indexOf('ds-i-active') === -1) {
-      var dsIWindow = new ds.electron.remote.BrowserWindow({
-        x: ds.screenSize.width - 300,
-        y: 0,
-        width: 300,
-        height: 400,
-        // frame: false,
-        // show: false,
-        // alwaysOnTop: true,
-        // transparent:true
-      });
+    // transforming browser using electron
+    // safe before state
+    ds.beforeBounds = ds.eWindow.getBounds();
 
-      // dsIWindow.setAlwaysOnTop(true, "floating");
-      // dsIWindow.setVisibleOnAllWorkspaces(true);
-      // dsIWindow.setFullScreenable(false);
+    // move to top right corner
+    ds.eWindow.setBounds({
+      x: ds.screenSize.width - 300,
+      y: 0,
+      width: 300,
+      height: 400,
+    });
+    
+    ds.$container.css('height', '400px');
 
-      // dsIWindow.loadURL(window.location.href + '?ds-i-active=true');
-      dsIWindow.loadURL(window.location.href);
-      // dsIWindow.webContents.openDevTools({ detach: true });
-
-      dsIWindow.once('ready-to-show', function () {
-        ds.eWindow.close();
-      });
-
-      win.on('closed', () => {
-        dsIWindow = null;
-      });
-
-      return;
-    }
+    // set electron window options
+    ds.eWindow.setAlwaysOnTop(true);
+    ds.eWindow.setMovable(false);
+    ds.eWindow.setResizable(false);
     
     ds.$container.css('height', '400px');
 
@@ -216,6 +218,14 @@ $(function() {
    * Removes data from regionContainer and makes everthying else visible 
    */
   function closeRegion() {
+    // restore electron before
+    ds.eWindow.setBounds(ds.beforeBounds);
+    ds.eWindow.setAlwaysOnTop(false);
+    ds.eWindow.setMenuBarVisibility(true);
+    ds.eWindow.setMovable(true);
+    ds.eWindow.setResizable(true);
+    ds.eWindow.setOpacity(1);
+
     // remove active region from profile
     var profile = getProfile();
     delete profile.dsIActive;
@@ -223,31 +233,13 @@ $(function() {
     $.jStorage.set(window.profilesKey, window.profiles);
 
     // restore electron before
-    if (window.location.search.indexOf('ds-i-active') !== -1) {
-      var dsIWindow = new ds.electron.remote.BrowserWindow({
-        width: 800,
-        height: 600,
-        show: false
-      });
-
-      dsIWindow.loadURL(window.location.href.split('?')[0]);
-      // dsIWindow.webContents.openDevTools({ detach: true });
-
-      dsIWindow.once('ready-to-show', function () {
-        ds.eWindow.close();
-      });
-
-      win.on('closed', () => {
-        dsIWindow = null;
-      });
-
-      return;
-    }
+    ds.electron.ipcRenderer.send('show-ds-i');
 
     delete ds.beforeBounds;
     delete ds.activeRegion;
 
     ds.$body.removeClass('ds-i-active');
+    ds.$body.addClass('transparent');
   }
   
   /**

@@ -1,5 +1,37 @@
-html, body {
+html {
   background-color: rgba(0, 0, 0, 0);
+  height: 100%;
+  overflow: hidden;
+}
+
+body.ds-i {
+  background-color: #fff;
+  margin-top: 35px;
+  overflow-y: auto;
+  height: 100%;
+  display: block;
+}
+
+.ds-i-app-control {
+  background-color: #dedede;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  right: 0;
+  text-align: right;
+  padding: 0px;
+  box-shadow: 0 0 10px 0px grey;
+}
+
+.ds-i-app-control .glyphicon-move {
+  -webkit-app-region: drag;
+  cursor: move;
+}
+
+.ds-i-app-control span {
+  padding: 10px;
+  cursor: pointer;
 }
 
 /* basic resets */
@@ -20,6 +52,12 @@ html, body {
 
 .ds-integrated::-webkit-scrollbar-thumb, .ds-integrated::-webkit-scrollbar-thumb:active, .ds-integrated::-webkit-scrollbar-thumb:hover {
   background-color: #1e5853;
+}
+
+body.ds-i-active {
+  background-color: rgba(0, 0, 0, 0);
+  margin-top: 0;
+  overflow-y: hidden;
 }
 
 body.ds-i-active > * {
