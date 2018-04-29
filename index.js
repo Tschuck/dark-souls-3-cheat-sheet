@@ -1,7 +1,8 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 const url = require('url');
 
+const pids = [ ];
 let win;
 
 function createWindow () {
@@ -18,18 +19,22 @@ function createWindow () {
     slashes: true
   }));
 
-  // win.webContents.openDevTools();
-  
   win.on('closed', () => {
     win = null
   });
+
+  // win.webContents.openDevTools({ detach: true });
 }
 
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    app.quit()
+    console.log('quitting application')
+    app.quit();
+
+    // workaround for electron is not closing one process
+    process.kill(process.pid);
   }
 });
 

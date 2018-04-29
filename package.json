@@ -4,10 +4,10 @@
   "description": "To view the cheat sheet [click here](http://zkjellberg.github.io/dark-souls-3-cheat-sheet/).",
   "main": "index.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron ./index.js",
     "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --icon=img/icon.ico --prune=true --out=release-builds --version-string.CompanyName='CE' --version-string.FileDescription='Dark Souls 3 Cheat Sheet' --version-string.ProductName='Dark Souls 3 Cheat Sheetapp'",
     "package-mac": "electron-packager . --overwrite --asar=true --platform=darwin --arch=x64 --icon=img/icon.ico --prune=true --out=release-builds",
-    "package-linux" : "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=img/favicon-152.png --prune=true --out=release-builds"
+    "package-linux": "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=img/favicon-152.png --prune=true --out=release-builds"
   },
   "repository": {
     "type": "git",
@@ -20,10 +20,7 @@
   },
   "homepage": "https://github.com/Tschuck/dark-souls-3-cheat-sheet#readme",
   "devDependencies": {
-    "electron": "^1.8.4",
+    "electron": "^1.8.6",
     "electron-packager": "^12.0.1"
-  },
-  "dependencies": {
-    "asar": "^0.14.3"
   }
 }

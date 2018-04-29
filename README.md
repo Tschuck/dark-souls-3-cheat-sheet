@@ -43,7 +43,7 @@ The **class="f_gem f_misc"** field is used for the filtering system. This task p
 
 If none of these filter classes match, use **class="f_none"**.
 
-# Dark Souls "integrated" mode
+# Dark Souls "integrated" mode for playthrough
 It's an nearly seamless window mode, to handle the wiki entries as an overlay during Dark Souls playing.
 The integrated mode uses Electron to build the web site into an application. Only 2 files are used and the origin template isn't touched.
 

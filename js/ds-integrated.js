@@ -90,21 +90,27 @@ $(function() {
         y: 0,
         width: 300,
         height: 400,
-        frame: false,
-        show: false,
-        alwaysOnTop: true,
-        transparent:true
+        // frame: false,
+        // show: false,
+        // alwaysOnTop: true,
+        // transparent:true
       });
 
-      dsIWindow.setAlwaysOnTop(true, "floating");
-      dsIWindow.setVisibleOnAllWorkspaces(true);
-      dsIWindow.setFullScreenable(false);
+      // dsIWindow.setAlwaysOnTop(true, "floating");
+      // dsIWindow.setVisibleOnAllWorkspaces(true);
+      // dsIWindow.setFullScreenable(false);
 
-      dsIWindow.loadURL(window.location.href + '?ds-i-active=true');
+      // dsIWindow.loadURL(window.location.href + '?ds-i-active=true');
+      dsIWindow.loadURL(window.location.href);
+      // dsIWindow.webContents.openDevTools({ detach: true });
 
-      // dsIWindow.webContents.openDevTools();
+      dsIWindow.once('ready-to-show', function () {
+        ds.eWindow.close();
+      });
 
-      ds.electron.remote.getCurrentWindow().close();
+      win.on('closed', () => {
+        dsIWindow = null;
+      });
 
       return;
     }
@@ -152,13 +158,18 @@ $(function() {
 
     // bin list element clicks
     ds.$container.find('li').click(function($event) {
+      // set cloned li active
+      var $currInput = $($event.currentTarget).find('input');
+      $currInput.prop('checked', true);
+      
       // set origin li active
-      var $originInput = $($('[data-id="' + $($event.currentTarget).attr('data-id') + '"] input[type="checkbox"]')[0]);
-      $originInput.prop('checked', true);
-
+      var $originInput = $('#' + $($event.currentTarget).attr('data-id'));
       $originInput.click();
-
       setTimeout(setActiveTodo);
+
+      $event.preventDefault();
+      $event.stopPropagation();
+      return false;
     });
 
     // set active todo
@@ -220,10 +231,15 @@ $(function() {
       });
 
       dsIWindow.loadURL(window.location.href.split('?')[0]);
+      // dsIWindow.webContents.openDevTools({ detach: true });
 
-      // dsIWindow.webContents.openDevTools();
+      dsIWindow.once('ready-to-show', function () {
+        ds.eWindow.close();
+      });
 
-      ds.electron.remote.getCurrentWindow().close();
+      win.on('closed', () => {
+        dsIWindow = null;
+      });
 
       return;
     }
